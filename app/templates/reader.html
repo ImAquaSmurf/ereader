@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ book.title }} · EPUB Reader</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#reader-main">Skip to content</a>
+  <div class="reader-shell">
+    <aside class="sidebar panel">
+      <div class="sidebar-head">
+        <a href="/" class="ghost-link">← Library</a>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch theme"></button>
+      </div>
+      <div class="book-meta">
+        <p class="section-kicker">Now reading</p>
+        <h1>{{ book.title }}</h1>
+        <p class="muted">{{ book.author }}</p>
+      </div>
+      <nav aria-label="Chapters" class="chapter-nav">
+        {% for item in book.chapters %}
+          <a href="/books/{{ slug }}?chapter={{ loop.index0 }}" class="chapter-link {% if loop.index0 == chapter_index %}active{% endif %}">
+            <span>{{ '%02d' % (loop.index) }}</span>
+            <span>{{ item.label }}</span>
+          </a>
+        {% endfor %}
+      </nav>
+    </aside>
+
+    <main id="reader-main" class="reader-main">
+      <header class="reader-top panel">
+        <div>
+          <p class="section-kicker">Chapter {{ chapter_index + 1 }}</p>
+          <h2>{{ chapter.label }}</h2>
+        </div>
+        <div class="pager">
+          {% if prev_index is not none %}
+          <a class="ghost-link" href="/books/{{ slug }}?chapter={{ prev_index }}">Previous</a>
+          {% endif %}
+          {% if next_index is not none %}
+          <a class="primary-btn inline-btn" href="/books/{{ slug }}?chapter={{ next_index }}">Next</a>
+          {% endif %}
+        </div>
+      </header>
+
+      <article class="panel prose">{{ content|safe }}</article>
+    </main>
+  </div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
