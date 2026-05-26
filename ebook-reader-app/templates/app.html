@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reader App</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="left-panel">
+      <div class="brand-block">
+        <p class="eyebrow">Library</p>
+        <h1>My Books</h1>
+        <p class="muted" id="auth-status">Checking session...</p>
+      </div>
+
+      <section class="panel-card" id="login-panel">
+        <h2>Email sign in</h2>
+        <p class="muted">Use your email to receive a magic link.</p>
+        <form id="login-form" class="stack-form">
+          <label for="email-input">Email</label>
+          <input id="email-input" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <button class="btn primary full-width" type="submit">Send magic link</button>
+        </form>
+        <p class="inline-message" id="login-message"></p>
+      </section>
+
+      <section class="panel-card" id="user-panel" hidden>
+        <div class="toolbar-row">
+          <button class="btn ghost" id="sign-out-btn" type="button">Sign out</button>
+          <button class="btn primary" id="load-books-btn" type="button">Refresh</button>
+        </div>
+
+        <form id="upload-form" class="stack-form compact-form" enctype="multipart/form-data">
+          <label for="book-title">Title</label>
+          <input id="book-title-input" name="title" type="text" placeholder="Book title" required>
+
+          <label for="book-author">Author</label>
+          <input id="book-author-input" name="author" type="text" placeholder="Author">
+
+          <label for="book-cover-url">Cover URL</label>
+          <input id="book-cover-url-input" name="cover_url" type="url" placeholder="https://example.com/cover.jpg">
+
+          <label for="epub-file-input">EPUB file</label>
+          <input id="epub-file-input" name="epub_file" type="file" accept=".epub,application/epub+zip" required>
+
+          <button class="btn primary full-width" type="submit">Upload EPUB</button>
+        </form>
+        <p class="inline-message" id="upload-message"></p>
+      </section>
+
+      <section class="panel-card">
+        <div class="section-head">
+          <h2>Continue reading</h2>
+        </div>
+        <div id="continue-reading" class="empty-state small-empty">
+          <p>No recent book yet.</p>
+        </div>
+      </section>
+
+      <section class="panel-card grow-panel">
+        <div class="section-head">
+          <h2>Library</h2>
+        </div>
+        <div id="book-list" class="book-list">
+          <div class="empty-state small-empty"><p>Sign in to see your books.</p></div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="reader-shell">
+      <header class="reader-toolbar">
+        <div>
+          <p class="eyebrow">Reader</p>
+          <h2 id="active-book-title">Welcome</h2>
+          <p id="active-book-author" class="muted">Upload or open a book to start reading.</p>
+        </div>
+
+        <div class="toolbar-actions">
+          <button class="btn ghost" id="theme-btn" type="button">Theme</button>
+          <button class="btn ghost" id="font-minus-btn" type="button">A-</button>
+          <button class="btn ghost" id="font-plus-btn" type="button">A+</button>
+          <button class="btn ghost" id="bookmark-btn" type="button">Bookmark</button>
+          <button class="btn ghost" id="note-btn" type="button">Note</button>
+        </div>
+      </header>
+
+      <section class="reader-main-grid">
+        <aside class="reader-sidecard">
+          <div class="section-head">
+            <h3>Contents</h3>
+          </div>
+          <div id="toc-list" class="toc-list">
+            <p class="muted">Open a book to load its table of contents.</p>
+          </div>
+
+          <div class="section-head section-gap">
+            <h3>Bookmarks</h3>
+          </div>
+          <div id="bookmark-list" class="mini-list">
+            <p class="muted">No bookmarks yet.</p>
+          </div>
+
+          <div class="section-head section-gap">
+            <h3>Notes</h3>
+          </div>
+          <div id="note-list" class="mini-list">
+            <p class="muted">No notes yet.</p>
+          </div>
+        </aside>
+
+        <section class="reader-stage">
+          <div id="reader-loading" class="reader-state">
+            <p>Choose or upload a book to start reading.</p>
+          </div>
+          <div id="viewer" class="viewer" hidden></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.APP_CONFIG = {
+      supabaseUrl: "{{ SUPABASE_URL|escapejs }}",
+      supabaseAnonKey: "{{ SUPABASE_ANON_KEY|escapejs }}"
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
